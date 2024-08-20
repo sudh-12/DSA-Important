@@ -1,0 +1,55 @@
+class Solution {
+     private:
+
+     bool dfs(int node, int col, vector<int> &color, vector<vector<int>> &graph){
+            color[node]=col;
+
+            for(auto x: graph[node]){
+                if(color[x]==-1){
+                    if(dfs(x,!col,color, graph)==false)
+                    return false;
+                }
+                else if(color[x]==color[node])
+                return false;
+            }
+
+            return true;
+     }
+    
+    // bool check (int src, vector<int> &visi, vector<vector<int>> &graph ){
+    //      queue<int> q;
+	//     q.push(src);
+	//     visi[src]=1;
+	    
+	//     while (!q.empty()){
+	//         int node = q.front();
+	//         q.pop();
+	        
+	//         for (auto &x: graph[node]){
+	//             if(visi[x]==-1){
+	//                 visi[x]= ~visi[node];
+	//                 q.push(x);
+	//             }
+	//             else if (visi[x]==visi[node])
+	//             return false;
+	//         }
+	//     }
+	    
+	//     return true;
+    // }
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        int V=graph.size();
+        vector<int> color(V,-1);
+	    
+        // if the length of the cycle in a graph is odd then that graph will never be a bipatite graph
+	   for(int i=0; i<V; ++i){
+	       if(color[i]==-1){
+	           if(dfs(i,0,color,graph)==false)
+	           return false;
+	       }
+	   }
+	   
+	   return true;
+    }
+};
