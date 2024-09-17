@@ -1,40 +1,26 @@
 class Solution {
 public:
-    vector<vector<int>> insert(vector<vector<int>>& inter, vector<int>& new_inter) {
-        int n = inter.size();
-        bool  f = 0;
-        vector<vector<int>> ans;
-        // int d =0;
-
-        for(int i=0; i<n; ++i){
-            if(f==0 && new_inter[0]<=inter[i][1]){
-                if(new_inter[1]<inter[i][0]){
-                    int s = min(inter[i][0], new_inter[0]);
-                    ans.push_back({s, new_inter[1]});
-                    f=1;
-                    i-=1;
-                    continue;
-                }
-                int s = min(new_inter[0], inter[i][0]);
-                int mxe = max(new_inter[1], inter[i][1]);
-                i+=1;
-                while(i<n && inter[i][0]<=mxe){
-                    mxe = max(mxe, inter[i][1]);
-                    i+=1;
-                }
-                ans.push_back({s,mxe});
-                f=1;
-                i-=1;
-                continue;
-            }
-
-            ans.push_back({inter[i][0], inter[i][1]});
+   vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        int n = intervals.size(), i = 0;
+        vector<vector<int>> res;
+        //case 1: no overlapping case before the merge intervals
+\t\t//compare ending point of intervals to starting point of newInterval
+        while(i < n && intervals[i][1] < newInterval[0]){
+            res.push_back(intervals[i]);
+            i++;
+        }                           
+\t\t//case 2: overlapping case and merging of intervals
+        while(i < n && newInterval[1] >= intervals[i][0]){
+            newInterval[0] = min(newInterval[0], intervals[i][0]);
+            newInterval[1] = max(newInterval[1], intervals[i][1]);
+            i++;
         }
-
-        if(f==0)
-        ans.push_back({new_inter[0], new_inter[1]});
-
-        return ans;
-
+        res.push_back(newInterval);
+        // case 3: no overlapping of intervals after newinterval being merged
+        while(i < n){
+            res.push_back(intervals[i]);
+            i++;
+        }
+        return res;
     }
 };
